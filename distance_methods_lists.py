@@ -1,5 +1,9 @@
 from distance_methods import *
 
-def levenstein_list(list1,list2):
+# Gives the average normalized levhenstein distance of two wordlists
+def levenstein_list_normalized(list1,list2):
+    leven_sum = 0
     for i in list1.length:
-        calc_L_distance(list1[i],list2[i])
+        leven_sum += calc_normalized_L_dist(list1[i],list2[i])
+
+    return leven_sum/list1.length
