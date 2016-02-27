@@ -1,3 +1,5 @@
+__author__ = "Michael Graf"
+
 def init_list(wrong_word, target_word):
     out_list = []
 
@@ -36,6 +38,6 @@ def calc_L_distance(wrong_word, target_word):
 # Normalizes the Levensthein distance by dividing by the length of the longer of the two words
 def calc_normalized_L_dist(word1, word2):
     if len(word1) > len(word2):
-        return (calc_L_distance(word1, word2)) / len(word1)
+        return (calc_L_distance(word1, word2)) / float(len(word1))
     else:
-        return (calc_L_distance(word1, word2)) / len(word2)
+        return (calc_L_distance(word1, word2)) / float(len(word2))
