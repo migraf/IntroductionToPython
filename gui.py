@@ -37,7 +37,6 @@ class Gui:
 
     def __init__(self, master):
 
-
         def selected_left(event):
 
             selected = self.__listbox_left.curselection()
@@ -57,7 +56,7 @@ class Gui:
         self.__input_frame = tk.Frame(master)
         self.__input_frame.grid()
 
-        self.label = tk.Label(self.__input_frame, text="Select two languages to compare")
+        self.label = tk.Label(self.__input_frame, text="\nSelect two languages to compare:\n")
         self.label.grid(row=0, column=0)
 
         self.__dropdown_frame = tk.Frame(self.__input_frame)
@@ -76,11 +75,11 @@ class Gui:
         self.__listbox_left = tk.Listbox(self.__listbox_frame_left,
                                          yscrollcommand=scrollbar_left.set,
                                          xscrollcommand=scrollbar_below_left.set,
-                                         selectmode='browse')
+                                         selectmode='browse', width=25)
         self.__listbox_right = tk.Listbox(self.__listbox_frame_right,
                                           yscrollcommand=scrollbar_right.set,
                                           xscrollcommand=scrollbar_below_right.set,
-                                          selectmode='browse')
+                                          selectmode='browse', width=25)
 
         scrollbar_left.config(command=self.__listbox_left.yview)
         scrollbar_below_left.config(command=self.__listbox_left.xview)
@@ -115,14 +114,8 @@ class Gui:
             self.__listbox_left.insert(tk.END, choice)
             self.__listbox_right.insert(tk.END, choice)
 
-        button_frame = tk.Frame(self.__input_frame)
-        button_frame.grid(row=3, column=0)
-
-        calculate_button = tk.Button(button_frame, text="calculate", command=self.__calculate)
-        calculate_button.grid(row=0, column=0)
-
-        random_button = tk.Button(button_frame, text="calculate random", command=self.__random_calculation)
-        random_button.grid(row=0, column=1)
+        options_frame = tk.Frame(self.__input_frame)
+        options_frame.grid(row=3, column=0)
 
         output_variations = ("output below",
                              "output in txt-file",
@@ -131,14 +124,27 @@ class Gui:
         self.__selected_output = tk.StringVar(master)
         self.__selected_output.set(output_variations[0])
 
-        self.__dropdown_output = tk.OptionMenu(self.__input_frame, self.__selected_output, *output_variations)
-        self.__dropdown_output.grid(row=4, column=0)
+        random_button = tk.Button(options_frame, text="set random languages", command=self.__random_languages)
+        random_button.grid(row=0, column=0)
+
+        self.__dropdown_output = tk.OptionMenu(options_frame, self.__selected_output, *output_variations)
+        self.__dropdown_output.grid(row=0, column=1)
+
+        button_frame = tk.Frame(self.__input_frame)
+        button_frame.grid(row=4, column=0)
+
+        calculate_button = tk.Button(button_frame, text="calculate", command=self.__calculate)
+        calculate_button.grid(row=0, column=0)
+        compare_all_button = tk.Button(button_frame,
+                                       text="compare first language to all languages",
+                                       command=self.__compare_all)
+        compare_all_button.grid(row=0, column=1)
 
         self.__textbox_frame = tk.Frame(self.__input_frame)
-        self.__textbox_frame.grid(row=5, column=0)
+        self.__textbox_frame.grid(row=6, column=0)
 
         scrollbar_text = tk.Scrollbar(self.__textbox_frame, orient=tk.VERTICAL)
-        self.__textbox = tk.Text(self.__textbox_frame, height=6, width=50, yscrollcommand=scrollbar_text.set)
+        self.__textbox = tk.Text(self.__textbox_frame, height=15, width=60, yscrollcommand=scrollbar_text.set)
 
         scrollbar_text.config(command=self.__textbox.yview)
 
@@ -191,7 +197,7 @@ class Gui:
 
             if output_type == "output below":
 
-                self.set_answer("goodbye\ngoodbye\ngoodbye\n...")
+                self.set_answer(language_one + "\n" + language_two)
 
             elif output_type == "output in txt-file":
 
@@ -199,12 +205,12 @@ class Gui:
 
                 datei = tkFileDialog.asksaveasfile()
                 if datei:
-                    datei.write("goodbye\ngoodbye\ngoodbye\n...")
+                    datei.write(language_one + "\n" + language_two)
                     datei.close()
 
             elif output_type == "output below and in txt-file":
 
-                self.set_answer("goodbye\ngoodbye\ngoodbye\n...")
+                self.set_answer(language_one + "\n" + language_two)
 
                 datei = tkFileDialog.asksaveasfile()
                 if datei:
@@ -212,7 +218,7 @@ class Gui:
                     datei.close()
 
 
-    def __random_calculation(self):
+    def __random_languages(self):
 
         boundary = len(self.__languages) - 1
 
@@ -229,29 +235,43 @@ class Gui:
         self.__text_left.config(text=language_one)
         self.__text_right.config(text=language_two)
 
-        output_type = self.__selected_output.get()
+    def __compare_all(self):
 
-        # hier sollte die methode ausgefuehrt werden, die die berechnung durchfuehrt und die Antwort zurueckgibt
+        language = self.__text_left.cget("text")
 
-        if output_type == "output below":
+        if language == "":
 
-            self.set_answer("goodbye\ngoodbye\ngoodbye\n...")
+             self.set_answer("You need to select a language to calculate a result!")
 
-        elif output_type == "output in txt-file":
+        else:
 
-            self.set_answer("The result was saved to a file...")
+            result = ""
 
-            datei = tkFileDialog.asksaveasfile()
-            if datei:
-                datei.write("goodbye\ngoodbye\ngoodbye\n...")
-                datei.close()
+            for lang in self.__languages:
+                result += lang + "\n"
 
-        elif output_type == "output below and in txt-file":
+            output_type = self.__selected_output.get()
 
-            self.set_answer("goodbye\ngoodbye\ngoodbye\n...")
+            # hier sollte die methode ausgefuehrt werden, die die berechnung durchfuehrt und die Antwort zurueckgibt
 
-            datei = tkFileDialog.asksaveasfile()
-            if datei:
-                datei.write(self.__textbox.get('1.0', 'end'))
-                datei.close()
+            if output_type == "output below":
 
+                self.set_answer(result)
+
+            elif output_type == "output in txt-file":
+
+                self.set_answer("The result was saved to a file...")
+
+                datei = tkFileDialog.asksaveasfile()
+                if datei:
+                    datei.write(result)
+                    datei.close()
+
+            elif output_type == "output below and in txt-file":
+
+                self.set_answer(result)
+
+                datei = tkFileDialog.asksaveasfile()
+                if datei:
+                    datei.write(self.__textbox.get('1.0', 'end'))
+                    datei.close()
