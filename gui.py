@@ -1,6 +1,7 @@
 __author__ = "Julian Petruck"
 
 import Tkinter as tk
+from random import randint
 import tkFileDialog
 
 
@@ -114,8 +115,14 @@ class Gui:
             self.__listbox_left.insert(tk.END, choice)
             self.__listbox_right.insert(tk.END, choice)
 
-        self.calculate_button = tk.Button(self.__input_frame, text="calculate", command=self.__calculate)
-        self.calculate_button.grid(row=3, column=0)
+        button_frame = tk.Frame(self.__input_frame)
+        button_frame.grid(row=3, column=0)
+
+        calculate_button = tk.Button(button_frame, text="calculate", command=self.__calculate)
+        calculate_button.grid(row=0, column=0)
+
+        random_button = tk.Button(button_frame, text="calculate random", command=self.__random_calculation)
+        random_button.grid(row=0, column=1)
 
         output_variations = ("output below",
                              "output in txt-file",
@@ -203,3 +210,48 @@ class Gui:
                 if datei:
                     datei.write(self.__textbox.get('1.0', 'end'))
                     datei.close()
+
+
+    def __random_calculation(self):
+
+        boundary = len(self.__languages) - 1
+
+        random_one = randint(0, boundary)
+        random_two = random_one
+
+        while random_one == random_two:
+
+            random_two = randint(0, boundary)
+
+        language_one = self.__languages[random_one]
+        language_two = self.__languages[random_two]
+
+        self.__text_left.config(text=language_one)
+        self.__text_right.config(text=language_two)
+
+        output_type = self.__selected_output.get()
+
+        # hier sollte die methode ausgefuehrt werden, die die berechnung durchfuehrt und die Antwort zurueckgibt
+
+        if output_type == "output below":
+
+            self.set_answer("goodbye\ngoodbye\ngoodbye\n...")
+
+        elif output_type == "output in txt-file":
+
+            self.set_answer("The result was saved to a file...")
+
+            datei = tkFileDialog.asksaveasfile()
+            if datei:
+                datei.write("goodbye\ngoodbye\ngoodbye\n...")
+                datei.close()
+
+        elif output_type == "output below and in txt-file":
+
+            self.set_answer("goodbye\ngoodbye\ngoodbye\n...")
+
+            datei = tkFileDialog.asksaveasfile()
+            if datei:
+                datei.write(self.__textbox.get('1.0', 'end'))
+                datei.close()
+
