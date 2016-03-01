@@ -2,24 +2,17 @@ __author__ = "Julian Petruck"
 
 from Tkinter import *
 from gui import *
+from input_reader import *
 
+
+language_dict = split_file("listss16.txt")
+languages = dict_keys_as_list(language_dict)
 
 frame = Tk()
 gui = Gui(frame)
-
-gui.set_answer("hallo\n"
-               "hallo\n"
-               ".\n"
-               ".\n"
-               ".\n"
-               ".\n"
-               "tschuess.")
-
-new_languages = ("1", "2", "3", "4", "5")
-
-gui.set_languages(new_languages)
-
 frame.title("Distance Methods on ASJP-Corpus")
+
+gui.set_languages(languages)
 
 frame.mainloop()
 
