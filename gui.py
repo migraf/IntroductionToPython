@@ -3,6 +3,8 @@ __author__ = "Julian Petruck"
 import Tkinter as tk
 from random import randint
 import tkFileDialog
+from calculate_output import *
+
 
 
 class Gui:
@@ -34,6 +36,7 @@ class Gui:
     __textbox_frame = 0
     __text_left = 0
     __text_right = 0
+
 
     def __init__(self, master):
 
@@ -164,7 +167,6 @@ class Gui:
             self.__listbox_left.insert(tk.END, choice)
             self.__listbox_right.insert(tk.END, choice)
 
-
     def set_answer(self, new_answer):
 
         self.__calculated_answer = new_answer
@@ -190,14 +192,14 @@ class Gui:
             self.set_answer("You should select two different languages!")
 
         else:
-
             output_type = self.__selected_output.get()
-
             # hier sollte die methode ausgefuehrt werden, die die berechnung durchfuehrt und die Antwort zurueckgibt
+            output = distance_two_languages(language_one, language_two,)
+
 
             if output_type == "output below":
 
-                self.set_answer(language_one + "\n" + language_two)
+                self.set_answer(compare_two_languages_output(language_one, language_two, output))
 
             elif output_type == "output in txt-file":
 
@@ -205,12 +207,12 @@ class Gui:
 
                 datei = tkFileDialog.asksaveasfile()
                 if datei:
-                    datei.write(language_one + "\n" + language_two)
+                    datei.write(compare_two_languages_output(language_one, language_two, output))
                     datei.close()
 
             elif output_type == "output below and in txt-file":
 
-                self.set_answer(language_one + "\n" + language_two)
+                self.set_answer(compare_two_languages_output(language_one, language_two, output))
 
                 datei = tkFileDialog.asksaveasfile()
                 if datei:
@@ -236,7 +238,7 @@ class Gui:
         self.__text_right.config(text=language_two)
 
     def __compare_all(self):
-
+        language_dict = split_file("listss16.txt")
         language = self.__text_left.cget("text")
 
         if language == "":
@@ -245,10 +247,10 @@ class Gui:
 
         else:
 
-            result = ""
+            result = compare_one_language_output(language_dict, language)
 
-            for lang in self.__languages:
-                result += lang + "\n"
+            #for lang in self.__languages:
+            #    result += lang + "\n"
 
             output_type = self.__selected_output.get()
 
