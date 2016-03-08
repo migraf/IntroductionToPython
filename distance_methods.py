@@ -1,5 +1,6 @@
 __author__ = "Michael Graf"
 
+
 def init_list(wrong_word, target_word):
     out_list = []
 
@@ -41,3 +42,32 @@ def calc_normalized_L_dist(word1, word2):
         return (calc_L_distance(word1, word2)) / float(len(word1))
     else:
         return (calc_L_distance(word1, word2)) / float(len(word2))
+
+
+# Returns a list of the n-grams of size of a word
+def create_n_grams(word, n):
+    n_grams = []
+    i = 0
+    while len(word) >= n + i:
+        n_grams.append(word[len(word) - (n + i): len(word) - i])
+        i += 1
+
+    n_grams.reverse()
+    return n_grams
+
+
+# The similarity of two words by intersecting n-grams, by the dice coefficient algorithm
+# returns float that can be seen as the percentage of similarity
+def dice_coefficient(word1, word2, n):
+    list1 = create_n_grams(word1, n)
+    list2 = create_n_grams(word2, n)
+
+    intersect = set(list1).intersection(list2)
+
+    dice_c = (2*len(intersect))/float(len(list1) + len(list2))
+
+    return dice_c
+
+
+
+
