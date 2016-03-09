@@ -24,4 +24,13 @@ def lstein_list_on_dictionary(dict, language):
     return compared_languages
 
 
-print lstein_list_on_dictionary(split_file("listss16.txt"), "NAUNA")
+# Calculates the dice coefficient for each corresponding word in two lists
+# and returns the normalized result for the whole lists
+def n_gram_dist_list_norm(list1, list2 , n):
+    n_dist = 0
+    for i in range(len(list1)):
+        n_dist += dice_coefficient(list1[i], list2[i], n)
+
+    return n_dist/len(list1)
+
+
