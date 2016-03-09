@@ -71,7 +71,3 @@ def dice_coefficient(word1, word2, n):
 
     return dice_c
 
-
-
-
-print create_n_grams("i",2)
