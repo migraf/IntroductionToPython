@@ -12,10 +12,7 @@ class Gui:
         "swedish",
         "french")
 
-    __calculated_answer = ("Here we will show\n"
-                           "the answer\n"
-                           "Our methods will\n"
-                           "calculate.")
+    __calculated_answer = ("Here we will show the answer Our methods will calculate.")
 
     __master = 0
     __input_frame = 0
