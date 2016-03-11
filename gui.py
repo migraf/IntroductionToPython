@@ -7,7 +7,7 @@ __author__ = "Julian Petruck"
 import Tkinter as tk
 from random import randint
 import tkFileDialog
-#from calculate_output import *
+from calculate_output import *
 
 class GUI:
 
@@ -262,14 +262,17 @@ class GUI:
             self.set_answer("You should select two different languages!")
 
         else:
-            output = "..."
+            output = distance_two_languages(language_one, language_two)
+
+            output = compare_two_languages_output(language_one, language_two, output)
 
             self.__write_output(output)
 
 
     # Compares one language to all other languages.
     def __compare_all(self):
-        #language_dict = split_file("listss16.txt")
+        language_dict = split_file("listss16.txt")
+
         # Gets the language.
         language = self.__text_left.cget("text")
 
@@ -279,8 +282,7 @@ class GUI:
              self.set_answer("You need to select a language to calculate a result!")
 
         else:
-            output = "..."
-                #compare_one_language_output(language_dict, language)
+            output = compare_one_language_output(language_dict, language)
 
             self.__write_output(output)
 
