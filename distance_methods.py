@@ -62,12 +62,12 @@ def dice_coefficient(word1, word2, n):
     list1 = create_n_grams(word1, n)
     list2 = create_n_grams(word2, n)
 
+    if not list1 and not list2:
+        return 0
+
     intersect = set(list1).intersection(list2)
 
     dice_c = (2*len(intersect))/float(len(list1) + len(list2))
 
     return dice_c
-
-
-
 
